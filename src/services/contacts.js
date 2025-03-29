@@ -1,31 +1,27 @@
-import { Contact } from '../models/Contact.js';
+import Contact from '../models/Contact.js';
 
-export const getAllContacts = async (req, res) => {
+const getContactById = async (contactId) => {
   try {
-    const contacts = await Contact.find();
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
-};
-
-export const getContactById = async (req, res) => {
-  try {
-    const { contactId } = req.params;
     const contact = await Contact.findById(contactId);
     if (!contact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      console.error(`Contact with ID ${contactId} not found`);
+      return null;
     }
-    res.status(200).json({
-      status: 200,
-      message: `Successfully found contact with id ${contactId}!`,
-      data: contact,
-    });
+    return contact;
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    console.error(`Error fetching contact with ID ${contactId}:`, error);
+    throw new Error('Failed to fetch contact');
   }
 };
+
+const getAllContacts = async () => {
+  try {
+    const contacts = await Contact.find();
+    return contacts;
+  } catch (error) {
+    console.error('Error fetching contacts:', error);
+    throw new Error('Failed to fetch contacts');
+  }
+};
+
+export { getAllContacts, getContactById };
