@@ -1,11 +1,9 @@
 export const errorHandler = (err, req, res, next) => {
-  console.error('Error middleware:', err);
+  const statusCode = err.status || 500;
 
-  const status = err.status || 500;
-
-  res.status(status).json({
-    status: 500,
-    message: 'Something went wrong',
-    data: err.data || err.message,
+  res.status(statusCode).json({
+    status: statusCode,
+    message: statusCode === 500 ? 'Something went wrong' : err.message,
+    data: err.message,
   });
 };
