@@ -8,11 +8,57 @@ import {
 } from '../services/contacts.js';
 
 export const getContacts = async (req, res) => {
-  const contacts = await getAllContacts();
+  let {
+    page = 1,
+    perPage = 10,
+    sortBy = 'name',
+    sortOrder = 'asc',
+    type,
+    isFavourite,
+  } = req.query;
+
+  page = parseInt(page);
+  perPage = parseInt(perPage);
+
+  const filter = {};
+  if (type) {
+    filter.contactType = type;
+  }
+  if (typeof isFavourite !== 'undefined') {
+    filter.isFavourite = isFavourite === 'true';
+  }
+
+  const sortOptions = {};
+  if (sortBy) {
+    sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
+  }
+
+  const totalItems = await getAllContacts(filter, true);
+
+  const totalPages = Math.ceil(totalItems / perPage);
+
+  if (page > totalPages && totalPages !== 0) {
+    throw createError(404, 'No results found on this page');
+  }
+
+  const contacts = await getAllContacts(filter, false, {
+    page,
+    perPage,
+    sortOptions,
+  });
+
   res.json({
     status: 200,
     message: 'Successfully found contacts!',
-    data: contacts,
+    data: {
+      data: contacts,
+      page,
+      perPage,
+      totalItems,
+      totalPages,
+      hasPreviousPage: page > 1,
+      hasNextPage: page < totalPages,
+    },
   });
 };
 
@@ -32,7 +78,6 @@ export const getContact = async (req, res) => {
 
 export const createNewContact = async (req, res) => {
   const { name, phoneNumber, email, isFavourite, contactType } = req.body;
-
   const newContact = await createContact({
     name,
     phoneNumber,
