@@ -4,7 +4,7 @@ const contactSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     phoneNumber: { type: String, required: true },
-    email: { type: String }, //
+    email: { type: String },
     isFavourite: { type: Boolean, default: false },
     contactType: {
       type: String,
@@ -13,7 +13,10 @@ const contactSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
 export const Contact = mongoose.model('Contact', contactSchema);
