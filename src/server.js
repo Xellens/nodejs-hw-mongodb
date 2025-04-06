@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import pino from 'pino';
-
+import { authRouter } from './routers/auth.js';
 import { contactsRouter } from './routers/contacts.js';
-
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+import cookieParser from 'cookie-parser';
 
 export const setupServer = () => {
   const app = express();
@@ -18,6 +18,11 @@ export const setupServer = () => {
     logger.info(`${req.method} ${req.url}`);
     next();
   });
+  app.use(cookieParser());
+
+  app.use(express.json());
+
+  app.use('/auth', authRouter);
 
   app.use('/contacts', contactsRouter);
 
