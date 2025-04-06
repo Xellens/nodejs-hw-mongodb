@@ -8,6 +8,7 @@ import {
 } from '../services/contacts.js';
 
 export const getContacts = async (req, res) => {
+  const userId = req.user._id;
   let {
     page = 1,
     perPage = 10,
@@ -33,7 +34,7 @@ export const getContacts = async (req, res) => {
     sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
   }
 
-  const totalItems = await getAllContacts(filter, true);
+  const totalItems = await getAllContacts(userId, filter, true);
 
   const totalPages = Math.ceil(totalItems / perPage);
 
@@ -41,7 +42,7 @@ export const getContacts = async (req, res) => {
     throw createError(404, 'No results found on this page');
   }
 
-  const contacts = await getAllContacts(filter, false, {
+  const contacts = await getAllContacts(userId, filter, false, {
     page,
     perPage,
     sortOptions,
@@ -64,7 +65,9 @@ export const getContacts = async (req, res) => {
 
 export const getContact = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const userId = req.user._id;
+
+  const contact = await getContactById(userId, contactId);
   if (!contact) {
     throw createError(404, 'Contact not found');
   }
@@ -77,8 +80,10 @@ export const getContact = async (req, res) => {
 };
 
 export const createNewContact = async (req, res) => {
+  const userId = req.user._id;
   const { name, phoneNumber, email, isFavourite, contactType } = req.body;
-  const newContact = await createContact({
+
+  const newContact = await createContact(userId, {
     name,
     phoneNumber,
     email,
@@ -95,7 +100,9 @@ export const createNewContact = async (req, res) => {
 
 export const patchContact = async (req, res) => {
   const { contactId } = req.params;
-  const updatedContact = await updateContact(contactId, req.body);
+  const userId = req.user._id;
+
+  const updatedContact = await updateContact(userId, contactId, req.body);
 
   if (!updatedContact) {
     throw createError(404, 'Contact not found');
@@ -110,7 +117,9 @@ export const patchContact = async (req, res) => {
 
 export const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await deleteContactById(contactId);
+  const userId = req.user._id;
+
+  const result = await deleteContactById(userId, contactId);
 
   if (!result) {
     throw createError(404, 'Contact not found');
