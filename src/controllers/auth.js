@@ -1,8 +1,18 @@
 import createError from 'http-errors';
-import { registerUser, findUserByEmail } from '../services/auth.js';
-import { loginUser, findUserByEmailAndPassword } from '../services/auth.js';
-import { refreshSession } from '../services/auth.js';
-import { logoutUser } from '../services/auth.js';
+import jwt from 'jsonwebtoken';
+
+import {
+  findUserByEmail,
+  findUserByEmailAndPassword,
+  registerUser,
+  loginUser,
+  refreshSession,
+  logoutUser,
+  updateUserPassword,
+  removeUserSession,
+} from '../services/auth.js';
+
+import { sendResetEmail } from '../services/email.js';
 
 export const registerController = async (req, res) => {
   const { name, email, password } = req.body;
@@ -14,7 +24,7 @@ export const registerController = async (req, res) => {
 
   const newUser = await registerUser({ name, email, password });
 
-  res.status(201).json({
+  return res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
     data: {
@@ -87,8 +97,58 @@ export const logoutController = async (req, res) => {
   }
 
   await logoutUser(refreshToken);
-
   res.clearCookie('refreshToken');
-
   res.status(204).send();
+};
+
+export const sendResetEmailController = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await findUserByEmail(email);
+  if (!user) {
+    throw createError(404, 'User not found!');
+  }
+
+  const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+    expiresIn: '5m',
+  });
+
+  const resetUrl = `${process.env.APP_DOMAIN}/reset-password?token=${token}`;
+
+  const sent = await sendResetEmail(email, resetUrl);
+  if (!sent) {
+    throw createError(500, 'Failed to send the email, please try again later.');
+  }
+
+  return res.status(200).json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  const { token, password } = req.body;
+
+  let payload;
+  try {
+    payload = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    throw createError(401, 'Token is expired or invalid.');
+  }
+
+  const user = await findUserByEmail(payload.email);
+  if (!user) {
+    throw createError(404, 'User not found!');
+  }
+
+  await updateUserPassword(user._id, password);
+
+  await removeUserSession(user._id);
+
+  res.json({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
+  });
 };

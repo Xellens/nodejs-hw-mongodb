@@ -15,6 +15,7 @@ import {
 } from '../schemas/contacts-schemas.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import {} from '../controllers/contacts.js';
+import { upload } from '../middlewares/upload.js';
 
 export const contactsRouter = Router();
 
@@ -26,6 +27,7 @@ contactsRouter.get('/:contactId', isValidId, ctrlWrapper(getContact));
 
 contactsRouter.post(
   '/',
+  upload.single('photo'),
   validateBody(createContactSchema),
   ctrlWrapper(createNewContact),
 );
