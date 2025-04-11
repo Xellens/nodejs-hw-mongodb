@@ -1,36 +1,43 @@
 import nodemailer from 'nodemailer';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
 function createTransporter() {
-  console.log('Nodemailer config (from env):', {
-    SMTP_HOST: process.env.SMTP_HOST,
-    SMTP_PORT: process.env.SMTP_PORT,
-    SMTP_USER: process.env.SMTP_USER,
-    SMTP_PASSWORD: process.env.SMTP_PASSWORD,
-    SMTP_FROM: process.env.SMTP_FROM,
+  const host = getEnvVar('SMTP_HOST');
+  const port = Number(getEnvVar('SMTP_PORT'));
+  const user = getEnvVar('SMTP_USER');
+  const pass = getEnvVar('SMTP_PASSWORD');
+  const from = getEnvVar('SMTP_FROM');
+
+  console.log('Nodemailer config (from getEnvVar):', {
+    SMTP_HOST: host,
+    SMTP_PORT: port,
+    SMTP_USER: user,
+    SMTP_PASSWORD: pass,
+    SMTP_FROM: from,
   });
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
+  return nodemailer.createTransport({
+    host,
+    port,
     secure: false,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
+      user,
+      pass,
     },
   });
-
-  return transporter;
 }
 
 const transporter = createTransporter();
 
 export async function sendResetEmail(email, resetUrl) {
+  const from = getEnvVar('SMTP_FROM');
+
   console.log('sendResetEmail: відправляємо листа на', email);
   console.log('resetUrl =', resetUrl);
 
   try {
     const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM,
+      from,
       to: email,
       subject: 'Reset your password',
       html: `
