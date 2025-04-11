@@ -7,6 +7,8 @@ import {
   deleteContactById,
 } from '../services/contacts.js';
 
+import { uploadImageBuffer } from '../services/cloudinary.js';
+
 export const getContacts = async (req, res) => {
   const userId = req.user._id;
   let {
@@ -83,15 +85,22 @@ export const createNewContact = async (req, res) => {
   const userId = req.user._id;
   const { name, phoneNumber, email, isFavourite, contactType } = req.body;
 
+  let photoUrl = null;
+  if (req.file) {
+    const result = await uploadImageBuffer(req.file.buffer);
+    photoUrl = result.secure_url;
+  }
+
   const newContact = await createContact(userId, {
     name,
     phoneNumber,
     email,
     isFavourite,
     contactType,
+    photo: photoUrl,
   });
 
-  res.status(201).json({
+  return res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
     data: newContact,

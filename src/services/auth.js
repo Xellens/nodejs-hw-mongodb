@@ -92,3 +92,12 @@ export const logoutUser = async (refreshToken) => {
 
   await Session.deleteOne({ _id: session._id });
 };
+
+export const updateUserPassword = async (userId, newPassword) => {
+  const hashed = await bcrypt.hash(newPassword, 10);
+  await User.findByIdAndUpdate(userId, { password: hashed });
+};
+
+export const removeUserSession = async (userId) => {
+  await Session.deleteMany({ userId });
+};
