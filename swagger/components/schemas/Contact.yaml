@@ -1,12 +1,19 @@
 type: object
-properties:
-  name:
-    type: string
-  email:
-    type: string
-  phone:
-    type: string
 required:
+  - _id
   - name
   - email
   - phone
+properties:
+  _id:
+    type: string
+    example: 65e4decdd286b30065d54af9
+  name:
+    type: string
+    example: 'Alice Johnson'
+  email:
+    type: string
+    example: alice@example.com
+  phone:
+    type: string
+    example: '+380971234567'

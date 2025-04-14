@@ -2,24 +2,25 @@ tags:
   - Auth
 summary: Реєстрація нового користувача
 operationId: registerUser
-description: Створення облікового запису нового користувача
+description: Реєстрація користувача по email та паролю
 security: []
 requestBody:
-  required: true
   content:
     application/json:
       schema:
         type: object
-        properties:
-          email:
-            type: string
-          password:
-            type: string
         required:
           - email
           - password
+        properties:
+          email:
+            type: string
+            example: user@example.com
+          password:
+            type: string
+            example: mySecurePassword123
 responses:
   '201':
     description: Користувача успішно зареєстровано
   '400':
-    description: Некоректні дані або користувач вже існує
+    description: Email вже використовується

@@ -6,13 +6,14 @@ description: Видаляє контакт за ID
 security:
   - bearerAuth: []
 parameters:
-  - name: id
-    in: path
+  - in: path
+    name: id
     required: true
     schema:
       type: string
+      example: 65e4decdd286b30065d54af9
 responses:
   '204':
     description: Контакт успішно видалено
-  '404':
-    $ref: ../../../components/responses/NotFound.yaml
+  '401':
+    $ref: ../../../components/responses/401.yaml

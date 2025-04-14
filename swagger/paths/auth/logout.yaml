@@ -2,11 +2,11 @@ tags:
   - Auth
 summary: Вихід користувача
 operationId: logoutUser
-description: Вихід з облікового запису (анулювання токена)
+description: Вихід із системи, анулювання токену
 security:
   - bearerAuth: []
 responses:
   '204':
     description: Вихід успішний
   '401':
-    description: Неавторизований запит
+    $ref: ../../components/responses/401.yaml

@@ -6,8 +6,7 @@ import { contactsRouter } from './routers/contacts.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
-
-import apiDocsRouter from './routers/apiDocsRouter.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 export const setupServer = () => {
   const app = express();
@@ -15,15 +14,14 @@ export const setupServer = () => {
 
   app.use(cors());
   app.use(express.json());
+  app.use(cookieParser());
 
   app.use((req, res, next) => {
     logger.info(`${req.method} ${req.url}`);
     next();
   });
 
-  app.use(cookieParser());
-
-  app.use('/api-docs', apiDocsRouter);
+  app.use('/api-docs', swaggerDocs());
 
   app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);

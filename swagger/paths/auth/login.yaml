@@ -2,24 +2,25 @@ tags:
   - Auth
 summary: Авторизація користувача
 operationId: loginUser
-description: Вхід користувача в систему
+description: Вхід користувача по email та паролю
 security: []
 requestBody:
-  required: true
   content:
     application/json:
       schema:
         type: object
-        properties:
-          email:
-            type: string
-          password:
-            type: string
         required:
           - email
           - password
+        properties:
+          email:
+            type: string
+            example: user@example.com
+          password:
+            type: string
+            example: mySecurePassword123
 responses:
   '200':
-    description: Успішна авторизація
+    description: Авторизація успішна
   '401':
-    description: Невірний email або пароль
+    $ref: ../../components/responses/401.yaml

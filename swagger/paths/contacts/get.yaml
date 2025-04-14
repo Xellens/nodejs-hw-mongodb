@@ -2,17 +2,17 @@ tags:
   - Contacts
 summary: Отримати список контактів
 operationId: getContacts
-description: Повертає масив усіх контактів користувача
+description: Повертає масив контактів поточного користувача
 security:
   - bearerAuth: []
 responses:
   '200':
-    description: Список контактів
+    description: Успішно отримано список контактів
     content:
       application/json:
         schema:
           type: array
           items:
-            $ref: ../../components/schemas/Contact.yaml
+            $ref: ../../components/schemas/contact.yaml
   '401':
-    description: Неавторизований запит
+    $ref: ../../components/responses/401.yaml
