@@ -7,9 +7,7 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
 
-import apiDocsRouter from './routes/apiDocsRouter.js';
-
-app.use('/api-docs', apiDocsRouter);
+import apiDocsRouter from './routers/apiDocsRouter.js';
 
 export const setupServer = () => {
   const app = express();
@@ -22,16 +20,15 @@ export const setupServer = () => {
     logger.info(`${req.method} ${req.url}`);
     next();
   });
+
   app.use(cookieParser());
 
-  app.use(express.json());
+  app.use('/api-docs', apiDocsRouter);
 
   app.use('/auth', authRouter);
-
   app.use('/contacts', contactsRouter);
 
   app.use(notFoundHandler);
-
   app.use(errorHandler);
 
   const port = process.env.PORT || 3000;
