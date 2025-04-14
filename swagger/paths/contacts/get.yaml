@@ -14,3 +14,5 @@ responses:
           type: array
           items:
             $ref: ../../components/schemas/Contact.yaml
+  '401':
+    description: Неавторизований запит

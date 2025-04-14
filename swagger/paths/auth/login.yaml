@@ -3,6 +3,7 @@ tags:
 summary: Авторизація користувача
 operationId: loginUser
 description: Вхід користувача в систему
+security: []
 requestBody:
   required: true
   content:

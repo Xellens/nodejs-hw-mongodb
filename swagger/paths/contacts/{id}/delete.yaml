@@ -6,7 +6,7 @@ description: Видаляє контакт за ID
 security:
   - bearerAuth: []
 parameters:
-  - name: contactId
+  - name: id
     in: path
     required: true
     schema:

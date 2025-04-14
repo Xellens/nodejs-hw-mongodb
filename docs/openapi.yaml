@@ -29,7 +29,7 @@ paths:
   /auth/refresh:
     post:
       $ref: ../swagger/paths/auth/refresh.yaml
-  /auth/verify/:verificationToken:
+  /auth/verify/{verificationToken}:
     get:
       $ref: ../swagger/paths/auth/verify-email.yaml
   /auth/send-reset-email:

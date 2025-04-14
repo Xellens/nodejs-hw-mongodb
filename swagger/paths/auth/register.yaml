@@ -3,6 +3,7 @@ tags:
 summary: Реєстрація нового користувача
 operationId: registerUser
 description: Створення облікового запису нового користувача
+security: []
 requestBody:
   required: true
   content:

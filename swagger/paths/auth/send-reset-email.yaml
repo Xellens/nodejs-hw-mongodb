@@ -3,6 +3,7 @@ tags:
 summary: Запит на скидання паролю
 operationId: sendResetPasswordEmail
 description: Надсилає лист для скидання паролю користувачу
+security: []
 requestBody:
   required: true
   content:

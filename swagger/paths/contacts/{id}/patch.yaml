@@ -6,7 +6,7 @@ description: Часткове оновлення інформації про к�
 security:
   - bearerAuth: []
 parameters:
-  - name: contactId
+  - name: id
     in: path
     required: true
     schema:

@@ -3,6 +3,7 @@ tags:
 summary: Оновлення токена
 operationId: refreshToken
 description: Оновлення access-токена за допомогою refresh-токена
+security: []
 requestBody:
   required: true
   content:
