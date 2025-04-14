@@ -14,40 +14,41 @@ servers:
   - url: http://localhost:3000
   - url: https://contacts-app-1y6c.onrender.com
 paths:
-/auth/register:
-  post:
-    $ref: ../swagger/paths/auth/register.yaml
-/auth/login:
-  post:
-    $ref: ../swagger/paths/auth/login.yaml
-/auth/logout:
-  post:
-    $ref: ../swagger/paths/auth/logout.yaml
-/auth/current:
-  get:
-    $ref: ../swagger/paths/auth/current.yaml
-/auth/refresh:
-  post:
-    $ref: ../swagger/paths/auth/refresh.yaml
-/auth/verify/:verificationToken:
-  get:
-    $ref: ../swagger/paths/auth/verify-email.yaml
-/auth/send-reset-email:
-  post:
-    $ref: ../swagger/paths/auth/send-reset-email.yaml
+  /auth/register:
+    post:
+      $ref: ../swagger/paths/auth/register.yaml
+  /auth/login:
+    post:
+      $ref: ../swagger/paths/auth/login.yaml
+  /auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout.yaml
+  /auth/current:
+    get:
+      $ref: ../swagger/paths/auth/current.yaml
+  /auth/refresh:
+    post:
+      $ref: ../swagger/paths/auth/refresh.yaml
+  /auth/verify/:verificationToken:
+    get:
+      $ref: ../swagger/paths/auth/verify-email.yaml
+  /auth/send-reset-email:
+    post:
+      $ref: ../swagger/paths/auth/send-reset-email.yaml
 
   /contacts:
-    $ref: ../swagger/paths/contacts/get.yaml
-  /contacts/{contactId}:
     get:
-      $ref: ../swagger/paths/contacts/{contactId}/get.yaml
-    patch:
-      $ref: ../swagger/paths/contacts/{contactId}/patch.yaml
-    delete:
-      $ref: ../swagger/paths/contacts/{contactId}/delete.yaml
-  /contacts:
+      $ref: ../swagger/paths/contacts/get.yaml
     post:
       $ref: ../swagger/paths/contacts/post.yaml
+  /contacts/{id}:
+    get:
+      $ref: ../swagger/paths/contacts/{id}/get.yaml
+    patch:
+      $ref: ../swagger/paths/contacts/{id}/patch.yaml
+    delete:
+      $ref: ../swagger/paths/contacts/{id}/delete.yaml
+
 components:
   securitySchemes:
     bearerAuth:

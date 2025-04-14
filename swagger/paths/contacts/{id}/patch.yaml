@@ -16,9 +16,9 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: ../../components/schemas/Contact.yaml
+        $ref: ../../../components/schemas/Contact.yaml
 responses:
   '200':
     description: Контакт оновлено
   '404':
-    $ref: ../../components/responses/NotFound.yaml
+    $ref: ../../../components/responses/NotFound.yaml

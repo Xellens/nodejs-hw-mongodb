@@ -6,7 +6,7 @@ description: Повертає один контакт за його іденти
 security:
   - bearerAuth: []
 parameters:
-  - name: contactId
+  - name: id
     in: path
     required: true
     schema:
@@ -17,6 +17,6 @@ responses:
     content:
       application/json:
         schema:
-          $ref: ../../components/schemas/Contact.yaml
+          $ref: ../../../components/schemas/Contact.yaml
   '404':
-    $ref: ../../components/responses/NotFound.yaml
+    $ref: ../../../components/responses/NotFound.yaml
