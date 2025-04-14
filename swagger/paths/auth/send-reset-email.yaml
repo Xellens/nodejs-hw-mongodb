@@ -1,0 +1,21 @@
+tags:
+  - Auth
+summary: Запит на скидання паролю
+operationId: sendResetPasswordEmail
+description: Надсилає лист для скидання паролю користувачу
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          email:
+            type: string
+        required:
+          - email
+responses:
+  '200':
+    description: Email з інструкціями успішно відправлено
+  '404':
+    description: Користувач з таким email не знайдений

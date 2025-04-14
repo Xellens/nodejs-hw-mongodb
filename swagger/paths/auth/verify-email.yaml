@@ -1,0 +1,16 @@
+tags:
+  - Auth
+summary: Підтвердження email
+operationId: verifyEmail
+description: Активація облікового запису за допомогою токену підтвердження
+parameters:
+  - name: verificationToken
+    in: path
+    required: true
+    schema:
+      type: string
+responses:
+  '200':
+    description: Email підтверджено
+  '404':
+    description: Токен не знайдено або вже використано

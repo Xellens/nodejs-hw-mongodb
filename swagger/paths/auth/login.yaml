@@ -1,0 +1,24 @@
+tags:
+  - Auth
+summary: Авторизація користувача
+operationId: loginUser
+description: Вхід користувача в систему
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          email:
+            type: string
+          password:
+            type: string
+        required:
+          - email
+          - password
+responses:
+  '200':
+    description: Успішна авторизація
+  '401':
+    description: Невірний email або пароль

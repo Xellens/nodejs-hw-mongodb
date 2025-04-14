@@ -1,0 +1,18 @@
+tags:
+  - Contacts
+summary: Створити контакт
+operationId: createContact
+description: Додає новий контакт до бази даних
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/Contact.yaml
+responses:
+  '201':
+    description: Контакт створено
+  '400':
+    description: Некоректні дані

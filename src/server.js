@@ -7,6 +7,10 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
 
+import apiDocsRouter from './routes/apiDocsRouter.js';
+
+app.use('/api-docs', apiDocsRouter);
+
 export const setupServer = () => {
   const app = express();
   const logger = pino();
