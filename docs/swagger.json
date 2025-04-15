@@ -17,6 +17,7 @@
       "url": "https://contacts-app-1y6c.onrender.com"
     }
   ],
+  "security": [],
   "tags": [
     {
       "name": "Students",
@@ -33,30 +34,127 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Отримати список контактів",
+        "summary": "Отримати список контактів (із пагінацією та сортуванням)",
         "operationId": "getContacts",
-        "description": "Повертає масив контактів поточного користувача",
-        "security": [
+        "description": "Повертає список контактів з можливістю фільтру/сортування/пагінації\n",
+        "security": [],
+        "parameters": [
           {
-            "bearerAuth": []
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1,
+            "description": "Номер сторінки (починається з 1)"
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 10,
+            "description": "Кількість контактів на сторінці"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "example": "name",
+            "description": "Назва поля для сортування"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
+            "example": "asc",
+            "description": "Напрямок сортування"
+          },
+          {
+            "in": "query",
+            "name": "filterName",
+            "schema": {
+              "type": "string"
+            },
+            "example": "John",
+            "description": "Приклад фільтру за імʼям (або інше, залежно від задачі)"
           }
         ],
         "responses": {
           "200": {
-            "description": "Успішно отримано список контактів",
+            "description": "Успішний запит (масив контактів)",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/contact"
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "page",
+                    "perPage",
+                    "total"
+                  ],
+                  "properties": {
+                    "page": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "perPage": {
+                      "type": "number",
+                      "example": 10
+                    },
+                    "total": {
+                      "type": "number",
+                      "example": 35
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "phoneNumber": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "photo": {
+                            "type": "string"
+                          },
+                          "isFavourite": {
+                            "type": "boolean"
+                          },
+                          "contactType": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/401"
+          "400": {
+            "description": "Некоректні параметри запиту"
           }
         }
       },
@@ -64,36 +162,52 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Створити новий контакт",
+        "summary": "Створити новий контакт (з можливістю завантажити фото)",
         "operationId": "createContact",
-        "description": "Створює новий контакт користувача",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "description": "Додає новий контакт. Підтримує multipart/form-data для завантаження фото.",
+        "security": [],
         "requestBody": {
+          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
                   "name",
-                  "email",
-                  "phone"
+                  "phoneNumber",
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
                     "type": "string",
-                    "example": "Bob Marley"
+                    "example": "Alice"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "example": "+380991234567"
                   },
                   "email": {
                     "type": "string",
-                    "example": "bob@example.com"
+                    "format": "email",
+                    "example": "alice@example.com"
                   },
-                  "phone": {
+                  "isFavourite": {
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "contactType": {
                     "type": "string",
-                    "example": "+380991112233"
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "example": "work"
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "JPEG/PNG file for contact photo"
                   }
                 }
               }
@@ -106,13 +220,30 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/contact"
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "phoneNumber": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "photo": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/401"
+          "400": {
+            "description": "Некоректні дані"
           }
         }
       }
@@ -163,37 +294,53 @@
         ],
         "summary": "Оновити контакт",
         "operationId": "updateContact",
-        "description": "Оновлює дані контакту",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "description": "Оновлює контакт (частково). Підтримує multipart/form-data для оновлення фото.",
+        "security": [],
         "parameters": [
           {
-            "in": "path",
             "name": "id",
+            "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "example": "65e4decdd286b30065d54af9"
+              "type": "string"
             }
           }
         ],
         "requestBody": {
+          "required": false,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Updated Name"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "example": "+380991112233"
                   },
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "email",
+                    "example": "test@example.com"
                   },
-                  "phone": {
-                    "type": "string"
+                  "isFavourite": {
+                    "type": "boolean"
+                  },
+                  "contactType": {
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ]
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "New photo file (optional)"
                   }
                 }
               }
@@ -202,17 +349,10 @@
         },
         "responses": {
           "200": {
-            "description": "Контакт оновлено",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/contact"
-                }
-              }
-            }
+            "description": "Контакт оновлено"
           },
-          "401": {
-            "$ref": "#/components/responses/401"
+          "400": {
+            "description": "Некоректні дані"
           }
         }
       },
@@ -245,186 +385,6 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
-          }
-        }
-      }
-    },
-    "/auth/register": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Реєстрація нового користувача",
-        "operationId": "registerUser",
-        "description": "Реєстрація користувача по email та паролю",
-        "security": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "user@example.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "mySecurePassword123"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Користувача успішно зареєстровано"
-          },
-          "400": {
-            "description": "Email вже використовується"
-          }
-        }
-      }
-    },
-    "/auth/login": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Авторизація користувача",
-        "operationId": "loginUser",
-        "description": "Вхід користувача по email та паролю",
-        "security": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "user@example.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "mySecurePassword123"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Авторизація успішна"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          }
-        }
-      }
-    },
-    "/auth/logout": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Вихід користувача",
-        "operationId": "logoutUser",
-        "description": "Вихід із системи, анулювання токену",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Вихід успішний"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          }
-        }
-      }
-    },
-    "/auth/current": {
-      "get": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Отримати поточного користувача",
-        "operationId": "getCurrentUser",
-        "description": "Повертає email залогіненого користувача",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Дані поточного користувача",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "email": {
-                      "type": "string",
-                      "example": "user@example.com"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          }
-        }
-      }
-    },
-    "/auth/send-reset-email": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Скидання паролю",
-        "operationId": "sendResetEmail",
-        "description": "Надсилає email з посиланням на скидання паролю",
-        "security": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "email"
-                ],
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "user@example.com"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Email з інструкціями надіслано"
-          },
-          "404": {
-            "description": "Користувача з таким email не знайдено"
           }
         }
       }

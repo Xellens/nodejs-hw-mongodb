@@ -1,35 +1,58 @@
 tags:
   - Contacts
-summary: Створити новий контакт
+summary: Створити новий контакт (з можливістю завантажити фото)
 operationId: createContact
-description: Створює новий контакт користувача
-security:
-  - bearerAuth: []
+description: Додає новий контакт. Підтримує multipart/form-data для завантаження фото.
+security: []
 requestBody:
+  required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         required:
           - name
-          - email
-          - phone
+          - phoneNumber
+          - contactType
         properties:
           name:
             type: string
-            example: 'Bob Marley'
+            example: 'Alice'
+          phoneNumber:
+            type: string
+            example: '+380991234567'
           email:
             type: string
-            example: bob@example.com
-          phone:
+            format: email
+            example: 'alice@example.com'
+          isFavourite:
+            type: boolean
+            example: false
+          contactType:
             type: string
-            example: '+380991112233'
+            enum: [work, home, personal]
+            example: 'work'
+          photo:
+            type: string
+            format: binary
+            description: 'JPEG/PNG file for contact photo'
 responses:
   '201':
     description: Контакт створено
     content:
       application/json:
         schema:
-          $ref: ../../components/schemas/contact.yaml
-  '401':
-    $ref: ../../components/responses/401.yaml
+          type: object
+          properties:
+            _id:
+              type: string
+            name:
+              type: string
+            phoneNumber:
+              type: string
+            email:
+              type: string
+            photo:
+              type: string
+  '400':
+    description: Некоректні дані
