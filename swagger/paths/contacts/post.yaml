@@ -1,9 +1,8 @@
 tags:
   - Contacts
-summary: Створити новий контакт (з можливістю завантажити фото)
+summary: Створити новий контакт
 operationId: createContact
-description: Додає новий контакт. Підтримує multipart/form-data для завантаження фото.
-security: []
+description: Додає новий контакт. Підтримує завантаження фото через multipart/form-data.
 requestBody:
   required: true
   content:
@@ -17,7 +16,7 @@ requestBody:
         properties:
           name:
             type: string
-            example: 'Alice'
+            example: 'Alice Johnson'
           phoneNumber:
             type: string
             example: '+380991234567'
@@ -35,24 +34,13 @@ requestBody:
           photo:
             type: string
             format: binary
-            description: 'JPEG/PNG file for contact photo'
+            description: 'Зображення контакту (JPEG/PNG)'
 responses:
   '201':
-    description: Контакт створено
+    description: Контакт успішно створено
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            _id:
-              type: string
-            name:
-              type: string
-            phoneNumber:
-              type: string
-            email:
-              type: string
-            photo:
-              type: string
+          $ref: ../../components/schemas/Contact.yaml
   '400':
     description: Некоректні дані

@@ -2,18 +2,32 @@ type: object
 required:
   - _id
   - name
-  - email
-  - phone
+  - phoneNumber
+  - contactType
 properties:
   _id:
     type: string
-    example: 65e4decdd286b30065d54af9
+    example: '60a7f1c2e1234567890abcdef'
   name:
     type: string
     example: 'Alice Johnson'
+  phoneNumber:
+    type: string
+    example: '+380991234567'
   email:
     type: string
-    example: alice@example.com
-  phone:
+    example: 'alice@example.com'
+  isFavourite:
+    type: boolean
+    example: false
+  contactType:
     type: string
-    example: '+380971234567'
+    enum: [work, home, personal]
+    example: 'work'
+  photo:
+    type: string
+    description: 'URL до завантаженого зображення'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2025-04-15T12:34:56.789Z'

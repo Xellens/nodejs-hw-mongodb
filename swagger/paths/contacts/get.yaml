@@ -1,85 +1,16 @@
 tags:
   - Contacts
-summary: Отримати список контактів (із пагінацією та сортуванням)
+summary: Отримати список контактів
 operationId: getContacts
-description: |
-  Повертає список контактів з можливістю фільтру/сортування/пагінації
-security: []
-parameters:
-  - in: query
-    name: page
-    schema:
-      type: integer
-    example: 1
-    description: Номер сторінки (починається з 1)
-  - in: query
-    name: perPage
-    schema:
-      type: integer
-    example: 10
-    description: Кількість контактів на сторінці
-  - in: query
-    name: sortBy
-    schema:
-      type: string
-    example: 'name'
-    description: Назва поля для сортування
-  - in: query
-    name: sortOrder
-    schema:
-      type: string
-      enum: [asc, desc]
-    example: 'asc'
-    description: Напрямок сортування
-  - in: query
-    name: filterName
-    schema:
-      type: string
-    example: 'John'
-    description: Приклад фільтру за імʼям (або інше, залежно від задачі)
+description: Повертає масив всіх контактів користувача.
 responses:
   '200':
-    description: Успішний запит (масив контактів)
+    description: Успішна відповідь. Повертається масив контактів.
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - data
-            - page
-            - perPage
-            - total
-          properties:
-            page:
-              type: number
-              example: 1
-            perPage:
-              type: number
-              example: 10
-            total:
-              type: number
-              example: 35
-            data:
-              type: array
-              items:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                  name:
-                    type: string
-                  phoneNumber:
-                    type: string
-                  email:
-                    type: string
-                  photo:
-                    type: string
-                  isFavourite:
-                    type: boolean
-                  contactType:
-                    type: string
-                  createdAt:
-                    type: string
-                    format: date-time
+          type: array
+          items:
+            $ref: ../../components/schemas/Contact.yaml
   '400':
-    description: Некоректні параметри запиту
+    description: Некоректний запит

@@ -1,18 +1,18 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Students app
+  title: Contacts App
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: >
-    This is a documentation of students app.
+    This is a documentation of Contacts API.
 tags:
   - name: Students
     description: Operations about students.
   - name: Auth
     description: Auth operations.
-security: []
+security: [{ bearerAuth: [] }]
 servers:
   - url: http://localhost:3000
   - url: https://contacts-app-1y6c.onrender.com
@@ -29,7 +29,6 @@ paths:
       $ref: ../swagger/paths/contacts/{id}/patch.yaml
     delete:
       $ref: ../swagger/paths/contacts/{id}/delete.yaml
-
 components:
   securitySchemes:
     bearerAuth:
