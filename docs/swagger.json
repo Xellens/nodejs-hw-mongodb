@@ -173,7 +173,7 @@
         ],
         "summary": "Оновити контакт",
         "operationId": "updateContact",
-        "description": "Оновлює дані контакту за ID. Підтримує оновлення фото через multipart/form-data.",
+        "description": "Оновлює дані контакту за ID. Підтримує оновлення фото через multipart/form-data.\n",
         "parameters": [
           {
             "in": "path",
@@ -186,7 +186,7 @@
           }
         ],
         "requestBody": {
-          "required": false,
+          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -206,7 +206,8 @@
                     "example": "updated@example.com"
                   },
                   "isFavourite": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
                   },
                   "contactType": {
                     "type": "string",

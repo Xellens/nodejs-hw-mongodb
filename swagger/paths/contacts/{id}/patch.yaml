@@ -2,7 +2,8 @@ tags:
   - Contacts
 summary: Оновити контакт
 operationId: updateContact
-description: Оновлює дані контакту за ID. Підтримує оновлення фото через multipart/form-data.
+description: >
+  Оновлює дані контакту за ID. Підтримує оновлення фото через multipart/form-data.
 parameters:
   - in: path
     name: id
@@ -11,7 +12,7 @@ parameters:
       type: string
       example: '60a7f1c2e1234567890abcdef'
 requestBody:
-  required: false
+  required: true
   content:
     multipart/form-data:
       schema:
@@ -29,6 +30,7 @@ requestBody:
             example: 'updated@example.com'
           isFavourite:
             type: boolean
+            example: false
           contactType:
             type: string
             enum: [work, home, personal]
@@ -43,6 +45,6 @@ responses:
     content:
       application/json:
         schema:
-          $ref: ../../../components/schemas/Contact.yaml
+          $ref: '../../../components/schemas/Contact.yaml'
   '400':
     description: Некоректні дані
