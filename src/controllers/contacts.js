@@ -6,7 +6,6 @@ import {
   updateContact,
   deleteContactById,
 } from '../services/contacts.js';
-
 import { uploadImageBuffer } from '../services/cloudinary.js';
 
 export const getContacts = async (req, res) => {
@@ -37,7 +36,6 @@ export const getContacts = async (req, res) => {
   }
 
   const totalItems = await getAllContacts(userId, filter, true);
-
   const totalPages = Math.ceil(totalItems / perPage);
 
   if (page > totalPages && totalPages !== 0) {
@@ -111,15 +109,19 @@ export const patchContact = async (req, res) => {
   const { contactId } = req.params;
   const userId = req.user._id;
 
-  const updatedContact = await updateContact(userId, contactId, req.body);
+  if (req.file) {
+    const result = await uploadImageBuffer(req.file.buffer);
+    req.body.photo = result.secure_url;
+  }
 
+  const updatedContact = await updateContact(userId, contactId, req.body);
   if (!updatedContact) {
     throw createError(404, 'Contact not found');
   }
 
   res.json({
     status: 200,
-    message: 'Successfully patched a contact!',
+    message: 'Successfully updated the contact!',
     data: updatedContact,
   });
 };
@@ -129,7 +131,6 @@ export const deleteContact = async (req, res) => {
   const userId = req.user._id;
 
   const result = await deleteContactById(userId, contactId);
-
   if (!result) {
     throw createError(404, 'Contact not found');
   }

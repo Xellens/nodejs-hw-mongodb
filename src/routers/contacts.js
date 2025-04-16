@@ -14,7 +14,6 @@ import {
   updateContactSchema,
 } from '../schemas/contacts-schemas.js';
 import { authenticate } from '../middlewares/authenticate.js';
-import {} from '../controllers/contacts.js';
 import { upload } from '../middlewares/upload.js';
 
 export const contactsRouter = Router();
@@ -35,6 +34,7 @@ contactsRouter.post(
 contactsRouter.patch(
   '/:contactId',
   isValidId,
+  upload.single('photo'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContact),
 );
