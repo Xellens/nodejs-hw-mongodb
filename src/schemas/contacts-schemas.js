@@ -6,6 +6,7 @@ export const createContactSchema = Joi.object({
   email: Joi.string().min(3).max(20).email().optional(),
   isFavourite: Joi.boolean().optional(),
   contactType: Joi.string().valid('work', 'home', 'personal').required(),
+  photo: Joi.string().uri().optional(),
 });
 
 export const updateContactSchema = Joi.object({
@@ -14,5 +15,5 @@ export const updateContactSchema = Joi.object({
   email: Joi.string().min(3).max(20).email().optional(),
   isFavourite: Joi.boolean().optional(),
   contactType: Joi.string().valid('work', 'home', 'personal').optional(),
+  photo: Joi.string().uri().optional(),
 });
-// тимчасова зміна для пушу
