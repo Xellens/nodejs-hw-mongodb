@@ -11,10 +11,12 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+      "description": "Local server"
     },
     {
-      "url": "https://contacts-app-1y6c.onrender.com"
+      "url": "https://contacts-app-1y6c.onrender.com",
+      "description": "Production server"
     }
   ],
   "security": [
@@ -24,12 +26,8 @@
   ],
   "tags": [
     {
-      "name": "Students",
-      "description": "Operations about students."
-    },
-    {
-      "name": "Auth",
-      "description": "Auth operations."
+      "name": "Contacts",
+      "description": "Operations about contacts"
     }
   ],
   "paths": {
@@ -321,7 +319,8 @@
           },
           "photo": {
             "type": "string",
-            "description": "URL до завантаженого зображення"
+            "description": "URL до завантаженого зображення",
+            "example": "https://res.cloudinary.com/your_cloud_name/image/upload/v1623456789/sample.jpg"
           },
           "createdAt": {
             "type": "string",

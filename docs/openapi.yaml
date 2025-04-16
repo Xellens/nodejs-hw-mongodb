@@ -8,14 +8,14 @@ info:
   description: >
     This is a documentation of Contacts API.
 tags:
-  - name: Students
-    description: Operations about students.
-  - name: Auth
-    description: Auth operations.
+  - name: Contacts
+    description: Operations about contacts
 security: [{ bearerAuth: [] }]
 servers:
   - url: http://localhost:3000
+    description: Local server
   - url: https://contacts-app-1y6c.onrender.com
+    description: Production server
 paths:
   /contacts:
     get:

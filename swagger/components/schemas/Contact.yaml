@@ -27,6 +27,7 @@ properties:
   photo:
     type: string
     description: 'URL до завантаженого зображення'
+    example: 'https://res.cloudinary.com/your_cloud_name/image/upload/v1623456789/sample.jpg'
   createdAt:
     type: string
     format: date-time
